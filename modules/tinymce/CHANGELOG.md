@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `slider` dialog component #TINY-8304
 - New `FakeClipboard` API to the `tinymce` global #TINY-8353
 - New `buttonType` property on dialog button components, supporting `toolbar` style in addition to `primary` and `secondary` #TINY-8304
+- New `editor.annotator.removeAll` API to remove all annotations by name. #TINY-8195
 
 ### Improved
 - The upload results returned from the `editor.uploadImages()` API now includes a `removed` flag, reflecting if the image was removed after a failed upload #TINY-7735
