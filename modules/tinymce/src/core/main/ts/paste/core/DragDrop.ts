@@ -5,7 +5,7 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
-import { Cell } from '@ephox/katamari';
+import { Arr, Cell } from '@ephox/katamari';
 
 import RangeUtils from '../../api/dom/RangeUtils';
 import Editor from '../../api/Editor';
@@ -28,6 +28,9 @@ const setFocusedRange = (editor: Editor, rng: Range): void => {
   editor.selection.setRng(rng);
 };
 
+const hasImage = (dataTransfer: DataTransfer): boolean =>
+  Arr.exists(dataTransfer.files, (file) => /^data:image\//.test(file.type));
+
 const setup = (editor: Editor, draggingInternallyState: Cell<boolean>): void => {
   // Block all drag/drop events
   if (Options.shouldPasteBlockDrop(editor)) {
@@ -42,7 +45,7 @@ const setup = (editor: Editor, draggingInternallyState: Cell<boolean>): void => 
     editor.on('drop', (e) => {
       const dataTransfer = e.dataTransfer;
 
-      if (dataTransfer && dataTransfer.files && dataTransfer.files.length > 0) {
+      if (dataTransfer && hasImage(dataTransfer)) {
         e.preventDefault();
       }
     });
