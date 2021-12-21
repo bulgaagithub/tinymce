@@ -16,13 +16,13 @@ import * as Options from '../../api/Options';
 import Delay from '../../api/util/Delay';
 import { EditorEvent } from '../../api/util/EventDispatcher';
 import VK from '../../api/util/VK';
+import * as Whitespace from '../../text/Whitespace';
 import * as InternalHtml from './InternalHtml';
 import * as Newlines from './Newlines';
 import { PasteBin } from './PasteBin';
 import * as PasteUtils from './PasteUtils';
 import * as ProcessFilters from './ProcessFilters';
 import * as SmartPaste from './SmartPaste';
-import * as Whitespace from './Whitespace';
 
 declare let window: any;
 
@@ -69,7 +69,7 @@ const pasteHtml = (editor: Editor, html: string, internalFlag: boolean): void =>
  */
 const pasteText = (editor: Editor, text: string): void => {
   const encodedText = editor.dom.encode(text).replace(/\r\n/g, '\n');
-  const normalizedText = Whitespace.normalizeWhitespace(editor, encodedText);
+  const normalizedText = Whitespace.normalize(encodedText, Options.getPasteTabSpaces(editor));
   const html = Newlines.convert(normalizedText, Options.getForcedRootBlock(editor), Options.getForcedRootBlockAttrs(editor));
   doPaste(editor, html, false, true);
 };

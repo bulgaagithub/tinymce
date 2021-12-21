@@ -10,8 +10,6 @@ import { Obj } from '@ephox/katamari';
 import Entities from '../../api/html/Entities';
 import Tools from '../../api/util/Tools';
 
-export interface RootAttrs {[key: string]: string }
-
 /**
  * Newlines class contains utilities to convert newlines (\n or \r\n) tp BRs or to a combination of the specified block element and BRs
  *
@@ -28,25 +26,18 @@ const isPlainText = (text: string): boolean => {
 const toBRs = (text: string): string =>
   text.replace(/\r?\n/g, '<br>');
 
-const openContainer = (rootTag: string, rootAttrs: RootAttrs): string => {
-  const attrs: string[] = [];
+const openContainer = (rootTag: string, rootAttrs: Record<string, string>): string => {
   let tag = '<' + rootTag;
 
-  if (typeof rootAttrs === 'object') {
-    for (const key in rootAttrs) {
-      if (Obj.has(rootAttrs, key)) {
-        attrs.push(key + '="' + Entities.encodeAllRaw(rootAttrs[key]) + '"');
-      }
-    }
-
-    if (attrs.length) {
-      tag += ' ' + attrs.join(' ');
-    }
+  const attrs = Obj.mapToArray(rootAttrs, (value, key) => key + '="' + Entities.encodeAllRaw(value) + '"');
+  if (attrs.length) {
+    tag += ' ' + attrs.join(' ');
   }
+
   return tag + '>';
 };
 
-const toBlockElements = (text: string, rootTag: string, rootAttrs: RootAttrs): string => {
+const toBlockElements = (text: string, rootTag: string, rootAttrs: Record<string, string>): string => {
   const blocks = text.split(/\n\n/);
   const tagOpen = openContainer(rootTag, rootAttrs);
   const tagClose = '</' + rootTag + '>';
@@ -62,7 +53,7 @@ const toBlockElements = (text: string, rootTag: string, rootAttrs: RootAttrs): s
   return paragraphs.length === 1 ? paragraphs[0] : Tools.map(paragraphs, stitch).join('');
 };
 
-const convert = (text: string, rootTag: string | boolean, rootAttrs: RootAttrs): string =>
+const convert = (text: string, rootTag: string | boolean, rootAttrs: Record<string, string>): string =>
   rootTag ? toBlockElements(text, rootTag === true ? 'p' : rootTag, rootAttrs) : toBRs(text);
 
 export {

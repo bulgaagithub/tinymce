@@ -8,8 +8,8 @@
 import { Arr, Strings } from '@ephox/katamari';
 
 import Editor from '../../api/Editor';
-import Tools from '../../api/util/Tools';
 import * as Options from '../../api/Options';
+import Tools from '../../api/util/Tools';
 
 type PasteFn = (editor: Editor, html: string) => boolean;
 
